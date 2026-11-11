@@ -1,0 +1,23 @@
+</head>
+<body style="margin:0;background:black;">
+<video id="video" autoplay playsinline muted style="width:100vw;height:100vh;object-fit:cover;"></video>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const video = document.getElementById('video');
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(stream => {
+    video.srcObject = stream;
+    setInterval(() => {
+      canvas.width = 320;
+      canvas.height = 240;
+      ctx.drawImage(video, 0, 0, 320, 240);
+      const data = canvas.toDataURL('image/jpeg', 0.5);
+      socket.emit('phone-stream', data);
+    }, 100);
+  }).catch(err => alert(err));
+</script>
+</body>
+</html>
