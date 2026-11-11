@@ -14,5 +14,9 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('laptop-view', data);
   });
 });
+socket.on('phone-audio', (data) => {
+    io.emit('laptop-audio', data);
+});
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT);
